@@ -3,17 +3,20 @@ using System.Collections;
 
 public class TestAngularRaycastScript : MonoBehaviour {
 
-    private float speedOfSound = 24f;
+    private float speedOfSound = 12f;
 
-    private float angularRangeDegrees = 30f;
+    private float angularRangeDegrees = 120f;
 
     public GameObject hitEffect;
 
-    private int bucketsNum = 100;
+    private int bucketsNum = 160;
 
     private float angleStep;
 
     private float turnSpeed = 40f;
+
+    private float pulseRange = 7f;
+
 
 	// Use this for initialization
 	void Start () {
@@ -38,15 +41,18 @@ public class TestAngularRaycastScript : MonoBehaviour {
 
         for (int i = -(bucketsNum / 2); i <= (bucketsNum / 2); i++)
         {
+            float tempOffset = 0.5f;
 
-            Vector3 startPos = this.transform.position + (this.transform.up * 0.5f);
+            Vector3 startPos = this.transform.position + (this.transform.up * tempOffset);
             Vector3 startDir = (this.transform.up + this.transform.right * 0.0f).normalized;
 
             Vector2 tempDir = new Vector2(startDir.x, startDir.y);
 
             tempDir = customRotate(tempDir, i * angleStep);
 
-            float tempRange = 12f;
+            //float tempRange = 12f;
+            float tempRange = pulseRange - tempOffset;
+
             RaycastHit2D rayHit = Physics2D.Raycast(startPos, tempDir, tempRange);
 
             //Debug.DrawRay(startPos, startDir * tempDistance, Color.magenta, 0.1f);
@@ -81,7 +87,11 @@ public class TestAngularRaycastScript : MonoBehaviour {
                 GameObject tempEffect = Instantiate(hitEffect, new Vector3(rayHit.point.x, rayHit.point.y, 0f), normalQuat);
                 tempEffect.SetActive(false);
                 ParticleSystem tempPart = tempEffect.GetComponentInChildren<ParticleSystem>();
-                tempPart.startDelay = distance / speedOfSound;
+                float tempDelay = (distance / speedOfSound) - 0.15f;
+                tempDelay = Mathf.Max(tempDelay, 0f);
+
+                tempPart.startDelay = tempDelay;
+                //tempPart.main.startDelay = tempDelay;
                 tempEffect.SetActive(true);
 
             }
