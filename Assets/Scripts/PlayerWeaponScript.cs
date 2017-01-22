@@ -6,6 +6,8 @@ public class PlayerWeaponScript : MonoBehaviour {
 
     private SimplePlayerScript playerScript;
     private GameData gameData;
+
+    [SerializeField]
     private PlayerData playerData;
     private JukeboxBehavior jukebox;
 
