@@ -12,6 +12,11 @@ public class PlayerData
         this.playerNum = playerNum;
         characterType = 0;
     }
+
+    public static string GetAxis(int playerNum, string baseAxis)
+    {
+        return playerNum == 0 ? baseAxis : baseAxis + "Alt";
+    }
 }
 
 public class GameData : MonoBehaviour
@@ -19,6 +24,10 @@ public class GameData : MonoBehaviour
     public static class CONST
     {
         public const int NUM_PLAYERS_STANDARD_MATCH = 2;
+        public const string HORIZONTAL_AXIS_PLAYER_1 = "Horizontal";
+        public const string HORIZONTAL_AXIS_PLAYER_2 = "HorizontalAlt";
+        public const string VERTICAL_AXIS_PLAYER_1 = "Vertical";
+        public const string VERTICAL_AXIS_PLAYER_2 = "VerticalAlt";
     }
 
     public List<Character> charactersAvailable;
