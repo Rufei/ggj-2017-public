@@ -8,7 +8,7 @@ public class DirectorMatchScript : MonoBehaviour {
     public int scorePlayer2;
 
     public float matchTimer;
-    private float matchThreshold = 73f;
+    private float matchThreshold = 72.0f;
 
     public GameObject player1Anchor;
     public GameObject player2Anchor;

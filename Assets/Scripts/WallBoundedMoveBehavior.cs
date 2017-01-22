@@ -12,6 +12,8 @@ public class WallBoundedMoveBehavior : MonoBehaviour {
     private SimplePlayerScript playerScript;
     private DirectorMatchScript matchDirector;
 
+    public bool isPlayerMoving;
+
 	// Use this for initialization
 	void Start () {
         myRigidBody2d = GetComponent<Rigidbody2D>();
@@ -22,6 +24,14 @@ public class WallBoundedMoveBehavior : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         Debug.DrawRay(transform.position, transform.up);
+
+        if(myRigidBody2d.velocity.sqrMagnitude > 2f)
+        {
+            isPlayerMoving = true;
+        }else
+        {
+            isPlayerMoving = false;
+        }
 
         if (matchDirector.hasMatchBegun)
         {
