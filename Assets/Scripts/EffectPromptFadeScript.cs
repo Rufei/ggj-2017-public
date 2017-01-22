@@ -14,6 +14,7 @@ public class EffectPromptFadeScript : MonoBehaviour {
     public float fadeThreshold;
 
     private bool isTriggered;
+    private bool isFinished;
 
     public AnimationCurve alphaCurve;
     public AnimationCurve scaleCurve;
@@ -36,6 +37,7 @@ public class EffectPromptFadeScript : MonoBehaviour {
         txtMeshBack.color = Color.clear;
 
         startScale = this.transform.localScale;
+        isFinished = false;
 
         //.Log(txtMeshBack.text);
     }
@@ -54,6 +56,7 @@ public class EffectPromptFadeScript : MonoBehaviour {
             if(fadeTimer > fadeThreshold)
             {
                 isTriggered = false;
+                isFinished = true;
             }
         }
         else
@@ -68,5 +71,10 @@ public class EffectPromptFadeScript : MonoBehaviour {
     public void triggerPrompt()
     {
         isTriggered = true;
+    }
+
+    public bool IsFinished()
+    {
+        return isFinished;
     }
 }
