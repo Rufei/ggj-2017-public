@@ -19,6 +19,8 @@ public class CricketScript : MonoBehaviour {
 
     private Transform target;
 
+    public SpriteRenderer effectPickupHalo;
+
 	// Use this for initialization
 	void Start () {
         rigid = this.GetComponent<Rigidbody2D>();
@@ -37,10 +39,12 @@ public class CricketScript : MonoBehaviour {
                 jumpTimer = 0f;
                 cricketJump();
             }
+            effectPickupHalo.enabled = false;
         }else
         {
             //this.transform.localPosition = Vector3.zero;
             this.transform.position = target.position;
+            effectPickupHalo.enabled = true;
         }
 
 	}
