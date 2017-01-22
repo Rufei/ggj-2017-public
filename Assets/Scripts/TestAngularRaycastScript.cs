@@ -51,7 +51,7 @@ public class TestAngularRaycastScript : MonoBehaviour {
 
     public void testRays()
     {
-        Debug.Log(" Fired rays ");
+        //Debug.Log(" Fired rays ");
         //RaycastHit2D rayHit = Physics2D.Raycast(transform.position, Vector2.up, 100f);
 
         for (int i = -(bucketsNum / 2); i <= (bucketsNum / 2); i++)
@@ -110,13 +110,13 @@ public class TestAngularRaycastScript : MonoBehaviour {
 
                 if(rayHit.collider.tag == "Player1Tag")
                 {
-                    Debug.Log("Player 1 is hit");
+                    //Debug.Log("Player 1 is hit");
                     matchDirector.reportPlayer1Hit();
                 }
 
                 if (rayHit.collider.tag == "Player2Tag")
                 {
-                    Debug.Log("Player 2 is hit");
+                    //Debug.Log("Player 2 is hit");
                     matchDirector.reportPlayer2Hit();
                 }
 

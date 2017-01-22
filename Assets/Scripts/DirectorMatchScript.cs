@@ -34,6 +34,10 @@ public class DirectorMatchScript : MonoBehaviour {
     public GameObject effectPlayer1HitPrefab;
     public GameObject effectPlayer2HitPrefab;
 
+    private CricketScript crickScript;
+
+    public GameObject effectCricketScorePrefab;
+
     // Match begin timing
     // 3 seconds total to match tempo taps from the drummer in the main music
     // READY...  prompt
@@ -43,6 +47,7 @@ public class DirectorMatchScript : MonoBehaviour {
     // Use this for initialization
     void Start () {
         tempAudioSource = this.GetComponent<AudioSource>();
+        crickScript = GameObject.FindObjectOfType<CricketScript>();
 
         prepMatch();
 	}
@@ -91,6 +96,25 @@ public class DirectorMatchScript : MonoBehaviour {
             }
         }
 
+        if (crickScript.isPickedUpByAPlayer)
+        {
+            if ((crickScript.transform.position - spawnPlayer1Transform.position).magnitude < 1f)
+            {
+                reportPlayer2Scored();
+            }
+
+            if ((crickScript.transform.position - spawnPlayer2Transform.position).magnitude < 1f)
+            {
+                reportPlayer1Scored();
+            }
+        }
+
+        if (hasMatchEnded)
+        {
+            crickScript.transform.position = new Vector3(100f, 100f, 0f);
+            crickScript.isPickedUpByAPlayer = true;
+        }
+
 	}
 
     public void reportPlayer1Hit()
@@ -100,6 +124,9 @@ public class DirectorMatchScript : MonoBehaviour {
             isPlayer1Respawning = true;
             Instantiate(effectPlayer1HitPrefab, player1Anchor.transform.position, Quaternion.identity);
             player1Anchor.transform.position = spawnPlayer1Transform.transform.position;
+            player1Anchor.transform.rotation = spawnPlayer1Transform.transform.rotation;
+            //respawnCricket();
+            crickScript.resetCricket();
             isPlayer1Respawning = false;
         }
     }
@@ -111,7 +138,37 @@ public class DirectorMatchScript : MonoBehaviour {
             isPlayer1Respawning = true;
             Instantiate(effectPlayer2HitPrefab, player2Anchor.transform.position, Quaternion.identity);
             player2Anchor.transform.position = spawnPlayer2Transform.transform.position;
+            player2Anchor.transform.rotation = spawnPlayer2Transform.transform.rotation;
+            //respawnCricket();
+            crickScript.resetCricket();
             isPlayer1Respawning = false;
         }
     }
+
+    void reportPlayer1Scored()
+    {
+        Debug.Log("Player 1 SCORED");
+        Instantiate(effectCricketScorePrefab, spawnPlayer2Transform.transform.position, Quaternion.identity);
+        scorePlayer1++;
+        respawnCricket();
+    }
+
+    void reportPlayer2Scored()
+    {
+        Debug.Log("Player 2 SCORED");
+        Instantiate(effectCricketScorePrefab, spawnPlayer1Transform.transform.position, Quaternion.identity);
+        scorePlayer2++;
+        respawnCricket();
+    }
+
+    public void respawnCricket()
+    {
+        crickScript.resetCricket();
+        float tempRadius = Random.Range(0f, 2f);
+        float tempAngle = Random.Range(0f, 2f * Mathf.PI);
+        Vector3 spawnCricketPos = new Vector3(tempRadius * Mathf.Cos(tempAngle), tempRadius * Mathf.Sin(tempAngle), 0f);
+        crickScript.transform.position = spawnCricketPos;
+
+    }
+
 }

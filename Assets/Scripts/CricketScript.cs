@@ -15,7 +15,7 @@ public class CricketScript : MonoBehaviour {
 
     private float forceFactor = 1f;
 
-    private bool isPickedUpByAPlayer = false;
+    public bool isPickedUpByAPlayer = false;
 
     private Transform target;
 
@@ -26,6 +26,8 @@ public class CricketScript : MonoBehaviour {
     void Start () {
         rigid = this.GetComponent<Rigidbody2D>();
         circleCol = this.GetComponent<CircleCollider2D>();
+
+        isPickedUpByAPlayer = false;
 
         jumpTimer = 0f;
 	}
@@ -44,7 +46,10 @@ public class CricketScript : MonoBehaviour {
         }else
         {
             //this.transform.localPosition = Vector3.zero;
-            this.transform.position = target.position;
+            if (target.position != null)
+            {
+                this.transform.position = target.position;
+            }
             effectPickupHalo.enabled = true;
         }
 
@@ -69,12 +74,23 @@ public class CricketScript : MonoBehaviour {
             if (!isPickedUpByAPlayer)
             {
                 isPickedUpByAPlayer = true;
+
+                //rigid.isKinematic = true;
                 circleCol.enabled = false;
+
                 //this.transform.parent = col.gameObject.transform;
                 target = col.gameObject.transform;
                 //this.transform.localPosition = Vector3.zero;
             }
         }
+    }
+
+    public void resetCricket()
+    {
+        jumpTimer = 0f;
+        circleCol.enabled = true;
+        target = null;
+        isPickedUpByAPlayer = false;
     }
     
 
