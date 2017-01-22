@@ -5,17 +5,17 @@ public class TestAngularRaycastScript : MonoBehaviour {
 
     private float speedOfSound = 12f;
 
-    private float angularRangeDegrees = 140;
+    public float angularRangeDegrees = 140;
 
     public GameObject hitEffect;
 
-    private int bucketsNum = 160;
+    public int bucketsNum = 160;
 
     private float angleStep;
 
     private float turnSpeed = 40f;
 
-    private float pulseRange = 3.5f;
+    public float pulseRange = 3.5f;
     
     /*
     RANGES:
@@ -37,7 +37,7 @@ public class TestAngularRaycastScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.I))
         {
             testRays();
             //testRays();
@@ -45,9 +45,9 @@ public class TestAngularRaycastScript : MonoBehaviour {
 
 	}
 
-    void testRays()
+    public void testRays()
     {
-
+        Debug.Log(" Fired rays ");
         //RaycastHit2D rayHit = Physics2D.Raycast(transform.position, Vector2.up, 100f);
 
         for (int i = -(bucketsNum / 2); i <= (bucketsNum / 2); i++)

@@ -29,6 +29,8 @@ public class EffectPromptFadeScript : MonoBehaviour {
 
         startColor = txtMesh.color;
         startColorBack = txtMeshBack.color;
+        startColor.a = 1f;
+        startColorBack.a = 1f;
 
         txtMesh.color = Color.clear;
         txtMeshBack.color = Color.clear;
