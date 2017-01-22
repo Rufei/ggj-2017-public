@@ -31,7 +31,7 @@ public class GameData : MonoBehaviour
         public const string VERTICAL_AXIS_PLAYER_1 = "Vertical";
         public const string VERTICAL_AXIS_PLAYER_2 = "VerticalAlt";
         public const string CONFIRM_BUTTON_PLAYER_1 = "space";
-        public const string CONFIRM_BUTTON_PLAYER_2 = "return";
+        public const string CONFIRM_BUTTON_PLAYER_2 = ".";
     }
 
     public List<Character> charactersAvailable;

@@ -45,6 +45,11 @@ public class DirectorMatchScript : MonoBehaviour {
     // READY...  prompt
     // BAT-TLE!!      prompt
 
+    public AudioSource readyAudio;
+
+    public AudioSource battleAudio;
+
+    public AudioSource finishAudio;
 
     // Use this for initialization
     void Start () {
@@ -74,6 +79,7 @@ public class DirectorMatchScript : MonoBehaviour {
         jukebox.PlayGameMusic(gameData.GetPlayerData(0).characterType, gameData.GetPlayerData(1).characterType);
         //tempAudioSource.Play();
         readyPromptScript.triggerPrompt();
+        readyAudio.Play();
 
     }
 
@@ -87,6 +93,7 @@ public class DirectorMatchScript : MonoBehaviour {
                 Debug.Log("The Match has begun!");
                 hasMatchBegun = true;
                 battlePromptScript.triggerPrompt();
+                battleAudio.Play();
             }
         }
 
@@ -101,6 +108,7 @@ public class DirectorMatchScript : MonoBehaviour {
                 crickScript.transform.position = new Vector3(100f, 100f, 0f);
                 crickScript.isPickedUpByAPlayer = true;
 
+                finishAudio.Play();
                 finishPromptScript.triggerPrompt();
             }
         }
