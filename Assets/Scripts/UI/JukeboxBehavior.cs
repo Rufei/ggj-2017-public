@@ -27,11 +27,11 @@ public class JukeboxBehavior : MonoBehaviour
         [System.Serializable]
         public class WeaponBeats
         {
-            public bool[] guitarBeats;
-            public bool[] bassBeats;
-            public bool[] drumBeats;
-            public bool[] vocalBeats;
-            public bool[] cymbalBeats;
+            public bool[] guitarBeats = new bool[8];
+            public bool[] bassBeats = new bool[8];
+            public bool[] drumBeats = new bool[8];
+            public bool[] vocalBeats = new bool[8];
+            public bool[] cymbalBeats = new bool[8];
         }
 
         public AudioClip clip;
@@ -201,7 +201,6 @@ public class JukeboxBehavior : MonoBehaviour
 
     private int GetSoonestPossibleWeaponBeat(int beat, Character.CHARTYPE weapon)
     {
-        int measureBeat = beat % CONST.WEAPON_BEAT_MAPPING_TOTAL_BEATS;
         bool[] weaponBeats = null;
         switch(weapon)
         {

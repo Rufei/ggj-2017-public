@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum InstrumentEnum { None, Guitar, Bass, Drum, Vocals, Cymbal};
-
 public class PlayerWeaponScript : MonoBehaviour {
 
-    public InstrumentEnum equippedWeapon;
-
     private SimplePlayerScript playerScript;
+    private GameData gameData;
+    private PlayerData playerData;
+    private JukeboxBehavior jukebox;
+
+    private int lastHandledBeat = -1;
 
     public TestAngularRaycastScript guitarScript;
     public TestAngularRaycastScript bassScript;
@@ -17,49 +18,52 @@ public class PlayerWeaponScript : MonoBehaviour {
     // Use this for initialization
     void Start () {
         playerScript = this.GetComponent<SimplePlayerScript>();
-        //equippedWeapon = InstrumentEnum.None;
-		
-	}
+        gameData = GameObject.Find("/GameData").GetComponent<GameData>();
+        playerData = gameData.GetPlayerData(playerScript.playerNum);
+        jukebox = GameObject.Find("/Jukebox").GetComponent<JukeboxBehavior>();
+    }
 	
 	// Update is called once per frame
 	void Update () {
-	    if(playerScript.playerNum == 0)
-        {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                attemptFireWeapon();
-            }
-        }else
-        {
-            if (Input.GetKeyDown(KeyCode.Period))
-            {
-                attemptFireWeapon();
-            }
-        }
-
+        CheckPullTrigger();
+        attemptFireWeapon();
 	}
+
+    void CheckPullTrigger()
+    {
+        if (Input.GetKeyDown(playerScript.playerNum == 0 ? KeyCode.Space : KeyCode.Period))
+        {
+            //Debug.Log("Player  " + (playerScript.playerNum + 1) + " " + "attempted to fire " + playerData.characterType);
+            jukebox.RequestAttack(playerData);
+        }
+    }
 
     void attemptFireWeapon()
     {
-        //Debug.Log("Player  " + (playerScript.playerNum + 1) + " " + "attempted to fire " + equippedWeapon);
-        switch (equippedWeapon)
+        JukeboxBehavior.Beat beat = jukebox.GetBeat();
+        if (beat != null && lastHandledBeat != beat.beatInSong 
+            && (playerScript.playerNum == 0 ? beat.isPlayer1Firing : beat.isPlayer2Firing))
         {
-            case InstrumentEnum.Guitar:
-                guitarScript.testRays();
-                break;
-            case InstrumentEnum.Bass:
-                bassScript.testRays();
-                break;
-            case InstrumentEnum.Drum:
-                drumScript.testRays();
-                break;
-            case InstrumentEnum.Vocals:
-                break;
-            case InstrumentEnum.Cymbal:
-                break;
-            default:
-                break;
+            lastHandledBeat = beat.beatInSong;
+            //Debug.Log("Player  " + (playerScript.playerNum + 1) + " " + "FIRING at " + Time.deltaTime);
+            switch (playerData.characterType)
+            {
+                case Character.CHARTYPE.CHAR_GUITAR:
+                    guitarScript.testRays();
+                    break;
+                case Character.CHARTYPE.CHAR_BASS:
+                    bassScript.testRays();
+                    break;
+                case Character.CHARTYPE.CHAR_DRUM:
+                    drumScript.testRays();
+                    break;
+                case Character.CHARTYPE.CHAR_VOCAL:
+                    break;
+                case Character.CHARTYPE.CHAR_CYMBAL:
+                    break;
+                default:
+                    break;
+            }
         }
-
     }
 }
