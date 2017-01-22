@@ -5,7 +5,7 @@ public class TestAngularRaycastScript : MonoBehaviour {
 
     private float speedOfSound = 12f;
 
-    private float angularRangeDegrees = 340;
+    private float angularRangeDegrees = 140;
 
     public GameObject hitEffect;
 
@@ -52,15 +52,13 @@ public class TestAngularRaycastScript : MonoBehaviour {
 
         for (int i = -(bucketsNum / 2); i <= (bucketsNum / 2); i++)
         {
-            float tempOffset = 0.6f;
-
+            float tempOffset = 0.3f;
 
             Vector3 startDir = (this.transform.up + this.transform.right * 0.0f).normalized;
             Vector2 tempDir = new Vector2(startDir.x, startDir.y);
             tempDir = customRotate(tempDir, i * angleStep);
             //Vector3 startPos = this.transform.position + (this.transform.up * tempOffset);
             Vector3 startPos = this.transform.position + (new Vector3(tempDir.x,tempDir.y,0f) * tempOffset);
-
 
             //float tempRange = 12f;
             float tempRange = pulseRange - tempOffset;
