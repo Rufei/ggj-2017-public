@@ -44,7 +44,7 @@ public class ShowOnFinishCanvasFinishing : MonoBehaviour
                 {
                     winText.text = "Player 01 Wins!";
                 }
-                else if (directorScript.scorePlayer1 > directorScript.scorePlayer2)
+                else if (directorScript.scorePlayer2 > directorScript.scorePlayer1)
                 {
                     winText.text = "Player 02 Wins!";
                 }
