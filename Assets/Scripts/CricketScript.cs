@@ -46,7 +46,7 @@ public class CricketScript : MonoBehaviour {
         }else
         {
             //this.transform.localPosition = Vector3.zero;
-            if (target.position != null)
+            if (target.position != null && this.transform.position != null)
             {
                 this.transform.position = target.position;
             }
