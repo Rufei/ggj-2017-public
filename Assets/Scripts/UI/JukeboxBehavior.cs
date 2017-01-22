@@ -12,7 +12,12 @@ public class JukeboxBehavior : MonoBehaviour
         public Sfx playerUnready;
         public Sfx allPlayersReady;
         public Music menuMusic;
-        public Music gameMusic;
+        public Music guitarGameMusic;
+        public Music bassGameMusic;
+        public Music drumGameMusic;
+        public Music vocalGameMusic;
+        public Music cymbalGameMusic;
+        public Music constantGameMusic;
     }
 
     [System.Serializable]
@@ -27,11 +32,11 @@ public class JukeboxBehavior : MonoBehaviour
         [System.Serializable]
         public class WeaponBeats
         {
-            public bool[] guitarBeats = new bool[8];
-            public bool[] bassBeats = new bool[8];
-            public bool[] drumBeats = new bool[8];
-            public bool[] vocalBeats = new bool[8];
-            public bool[] cymbalBeats = new bool[8];
+            public bool[] guitarBeats = new bool[16];
+            public bool[] bassBeats = new bool[16];
+            public bool[] drumBeats = new bool[16];
+            public bool[] vocalBeats = new bool[16];
+            public bool[] cymbalBeats = new bool[16];
         }
 
         public AudioClip clip;
@@ -59,29 +64,105 @@ public class JukeboxBehavior : MonoBehaviour
     {
         public const float EARLY_INPUT_WINDOW_SECONDS = 0.05f;
         public const float LATE_INPUT_WINDOW_SECONDS = 0.05f;
-        public const int WEAPON_BEAT_MAPPING_TOTAL_BEATS = 8;
+        public const float MUSIC_VOLUME_DEFAULT = 0.4f;
+        public const float MUSIC_VOLUME_MUTED = 0.0f;
+        public const float MUSIC_VOLUME_LOUD = 0.8f;
     }
 
     public Library lib;
-    public AudioSource cameraAudioSourcePrefab;
+    public AudioSource audioSourcePrefab;
 
     private AudioSource sfxSrc;
     private AudioSource musicSrc;
+    private AudioSource guitarSrc;
+    private AudioSource bassSrc;
+    private AudioSource drumSrc;
+    private AudioSource vocalSrc;
+    private AudioSource cymbalSrc;
     private Music currentMusic;
     private Dictionary<int, Beat> currentBeats;
+
+    private Character.CHARTYPE playerOneType;
+    private Character.CHARTYPE playerTwoType;
+    private int lastHandledBeat = -1;
+    private int playerOneMuteBeat = -1;
+    private int playerTwoMuteBeat = -1;
 
     void Start()
     {
         currentBeats = new Dictionary<int, Beat>();
         if (sfxSrc == null)
         {
-            sfxSrc = Instantiate(cameraAudioSourcePrefab, transform);
+            sfxSrc = Instantiate(audioSourcePrefab, transform);
         }
         if (musicSrc == null)
         {
-            musicSrc = Instantiate(cameraAudioSourcePrefab, transform);
-            musicSrc.volume = 0.4f;
+            musicSrc = Instantiate(audioSourcePrefab, transform);
+            musicSrc.volume = CONST.MUSIC_VOLUME_DEFAULT;
         }
+        if (guitarSrc == null)
+        {
+            guitarSrc = Instantiate(audioSourcePrefab, transform);
+            guitarSrc.volume = CONST.MUSIC_VOLUME_DEFAULT;
+            guitarSrc.clip = lib.guitarGameMusic.clip;
+        }
+        if (bassSrc == null)
+        {
+            bassSrc = Instantiate(audioSourcePrefab, transform);
+            bassSrc.volume = CONST.MUSIC_VOLUME_DEFAULT;
+            bassSrc.clip = lib.bassGameMusic.clip;
+        }
+        if (drumSrc == null)
+        {
+            drumSrc = Instantiate(audioSourcePrefab, transform);
+            drumSrc.volume = CONST.MUSIC_VOLUME_DEFAULT;
+            drumSrc.clip = lib.drumGameMusic.clip;
+        }
+        if (vocalSrc == null)
+        {
+            vocalSrc = Instantiate(audioSourcePrefab, transform);
+            vocalSrc.volume = CONST.MUSIC_VOLUME_DEFAULT;
+            vocalSrc.clip = lib.vocalGameMusic.clip;
+        }
+        if (cymbalSrc == null)
+        {
+            cymbalSrc = Instantiate(audioSourcePrefab, transform);
+            cymbalSrc.volume = CONST.MUSIC_VOLUME_DEFAULT;
+            cymbalSrc.clip = lib.cymbalGameMusic.clip;
+        }
+    }
+
+    void Update()
+    {
+        JukeboxBehavior.Beat beat = GetBeat();
+        if (beat != null && lastHandledBeat != beat.beatInSong) {
+            //Debug.Log("Player  " + (playerScript.playerNum + 1) + " " + "FIRING at " + Time.deltaTime);
+            if (beat.isPlayer1Firing)
+            {
+                GetAudioSource(playerOneType).volume = CONST.MUSIC_VOLUME_LOUD;
+                playerOneMuteBeat = GetSoonestPossibleWeaponBeat(beat.beatInSong + 1, playerOneType);
+            }
+            if (beat.isPlayer2Firing)
+            {
+                GetAudioSource(playerTwoType).volume = CONST.MUSIC_VOLUME_LOUD;
+                playerTwoMuteBeat = GetSoonestPossibleWeaponBeat(beat.beatInSong + 1, playerTwoType);
+            }
+            lastHandledBeat = GetCurrentBeat();
+        }
+
+        if (currentMusic != null)
+        {
+            int cur = GetCurrentBeat();
+            if (playerOneMuteBeat == cur)
+            {
+                GetAudioSource(playerOneType).volume = CONST.MUSIC_VOLUME_MUTED;
+            }
+            if (playerTwoMuteBeat == cur)
+            {
+                GetAudioSource(playerTwoType).volume = CONST.MUSIC_VOLUME_MUTED;
+            }
+        }
+
     }
 
     //void FixedUpdate()
@@ -112,9 +193,72 @@ public class JukeboxBehavior : MonoBehaviour
         else
         {
             musicSrc.Stop();
+            guitarSrc.Stop();
+            bassSrc.Stop();
+            drumSrc.Stop();
+            vocalSrc.Stop();
+            cymbalSrc.Stop();
             musicSrc.clip = music.clip;
             currentMusic = music;
             musicSrc.Play();
+        }
+    }
+
+    public void PlayGameMusic(Character.CHARTYPE playerOne, Character.CHARTYPE playerTwo)
+    {
+        if (musicSrc.clip == lib.constantGameMusic.clip)
+        {
+            if (musicSrc.isPlaying)
+            {
+                return;
+            }
+            musicSrc.Play();
+        }
+        else
+        {
+            musicSrc.Stop();
+            guitarSrc.Stop();
+            bassSrc.Stop();
+            drumSrc.Stop();
+            vocalSrc.Stop();
+            cymbalSrc.Stop();
+            musicSrc.volume = CONST.MUSIC_VOLUME_DEFAULT;
+            guitarSrc.volume = CONST.MUSIC_VOLUME_DEFAULT;
+            bassSrc.volume = CONST.MUSIC_VOLUME_DEFAULT;
+            drumSrc.volume = CONST.MUSIC_VOLUME_DEFAULT;
+            vocalSrc.volume = CONST.MUSIC_VOLUME_DEFAULT;
+            cymbalSrc.volume = CONST.MUSIC_VOLUME_DEFAULT;
+            GetAudioSource(playerOne).volume = CONST.MUSIC_VOLUME_MUTED;
+            GetAudioSource(playerTwo).volume = CONST.MUSIC_VOLUME_MUTED;
+            musicSrc.clip = lib.constantGameMusic.clip;
+            currentMusic = lib.constantGameMusic;
+            playerOneType = playerOne;
+            playerTwoType = playerTwo;
+            musicSrc.Play();
+            guitarSrc.Play();
+            bassSrc.Play();
+            drumSrc.Play();
+            vocalSrc.Play();
+            cymbalSrc.Play();
+        }
+    }
+
+    public AudioSource GetAudioSource(Character.CHARTYPE type)
+    {
+        switch (type)
+        {
+            case Character.CHARTYPE.CHAR_GUITAR:
+                return guitarSrc;
+            case Character.CHARTYPE.CHAR_BASS:
+                return bassSrc;
+            case Character.CHARTYPE.CHAR_DRUM:
+                return drumSrc;
+            case Character.CHARTYPE.CHAR_VOCAL:
+                return vocalSrc;
+            case Character.CHARTYPE.CHAR_CYMBAL:
+                return cymbalSrc;
+            default:
+                return null;
         }
     }
 
@@ -223,9 +367,9 @@ public class JukeboxBehavior : MonoBehaviour
                 return int.MaxValue;
         }
         
-        for (int i = beat; i < beat + CONST.WEAPON_BEAT_MAPPING_TOTAL_BEATS; i++)
+        for (int i = beat; i < beat + weaponBeats.Length; i++)
         {
-            if (weaponBeats[i % CONST.WEAPON_BEAT_MAPPING_TOTAL_BEATS])
+            if (weaponBeats[i % weaponBeats.Length])
             {
                 return i;
             }

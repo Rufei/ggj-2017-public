@@ -27,6 +27,7 @@ public class DirectorMatchScript : MonoBehaviour {
     public EffectPromptFadeScript finishPromptScript;
 
     private AudioSource tempAudioSource;
+    private GameData gameData;
     private JukeboxBehavior jukebox;
 
     private bool isPlayer1Respawning;
@@ -48,6 +49,7 @@ public class DirectorMatchScript : MonoBehaviour {
     // Use this for initialization
     void Start () {
         tempAudioSource = this.GetComponent<AudioSource>();
+        gameData = GameObject.Find("/GameData").GetComponent<GameData>();
         jukebox = GameObject.Find("/Jukebox").GetComponent<JukeboxBehavior>();
         crickScript = GameObject.FindObjectOfType<CricketScript>();
 
@@ -69,7 +71,7 @@ public class DirectorMatchScript : MonoBehaviour {
 
         player2Anchor.transform.position = spawnPlayer2Transform.position;
         player2Anchor.transform.rotation = spawnPlayer2Transform.rotation;
-        jukebox.PlayMusic(jukebox.lib.gameMusic);
+        jukebox.PlayGameMusic(gameData.GetPlayerData(0).characterType, gameData.GetPlayerData(1).characterType);
         //tempAudioSource.Play();
         readyPromptScript.triggerPrompt();
 
