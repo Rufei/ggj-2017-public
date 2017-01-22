@@ -9,9 +9,12 @@ public class WallBoundedMoveBehavior : MonoBehaviour {
 
     private Rigidbody2D myRigidBody2d;
 
+    private SimplePlayerScript playerScript;
+
 	// Use this for initialization
 	void Start () {
         myRigidBody2d = GetComponent<Rigidbody2D>();
+        playerScript = this.GetComponent<SimplePlayerScript>();
     }
 	
 	// Update is called once per frame
@@ -20,8 +23,15 @@ public class WallBoundedMoveBehavior : MonoBehaviour {
         
         if (!myRigidBody2d.IsTouchingLayers(LayerMask.NameToLayer("Level Solid")))
         {
-            myRigidBody2d.velocity = transform.up * Input.GetAxis("Vertical") * Time.deltaTime * forwardSpeed;
-            myRigidBody2d.MoveRotation(myRigidBody2d.rotation + Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime * -1);
+            if (playerScript.playerNum == 0)
+            {
+                myRigidBody2d.velocity = transform.up * Input.GetAxis("Vertical") * Time.deltaTime * forwardSpeed;
+                myRigidBody2d.MoveRotation(myRigidBody2d.rotation + Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime * -1);
+            }else
+            {
+                myRigidBody2d.velocity = transform.up * Input.GetAxis("VerticalAlt") * Time.deltaTime * forwardSpeed;
+                myRigidBody2d.MoveRotation(myRigidBody2d.rotation + Input.GetAxis("HorizontalAlt") * turnSpeed * Time.deltaTime * -1);
+            }
         }
     }
 }

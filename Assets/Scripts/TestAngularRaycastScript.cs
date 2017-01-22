@@ -5,7 +5,7 @@ public class TestAngularRaycastScript : MonoBehaviour {
 
     private float speedOfSound = 12f;
 
-    private float angularRangeDegrees = 120f;
+    private float angularRangeDegrees = 340;
 
     public GameObject hitEffect;
 
@@ -15,9 +15,20 @@ public class TestAngularRaycastScript : MonoBehaviour {
 
     private float turnSpeed = 40f;
 
-    private float pulseRange = 7f;
+    private float pulseRange = 3.5f;
+    
+    /*
+    RANGES:
+    AOE = 2
+    Short = 3.5f
+    Medium = 7
+    Long = 11f
 
-
+    WIDTHS:
+    Thin = 30
+    Medium = 60
+    Wide = 160
+    */
 	// Use this for initialization
 	void Start () {
         angleStep = angularRangeDegrees / bucketsNum;
@@ -41,14 +52,15 @@ public class TestAngularRaycastScript : MonoBehaviour {
 
         for (int i = -(bucketsNum / 2); i <= (bucketsNum / 2); i++)
         {
-            float tempOffset = 0.5f;
+            float tempOffset = 0.6f;
 
-            Vector3 startPos = this.transform.position + (this.transform.up * tempOffset);
+
             Vector3 startDir = (this.transform.up + this.transform.right * 0.0f).normalized;
-
             Vector2 tempDir = new Vector2(startDir.x, startDir.y);
-
             tempDir = customRotate(tempDir, i * angleStep);
+            //Vector3 startPos = this.transform.position + (this.transform.up * tempOffset);
+            Vector3 startPos = this.transform.position + (new Vector3(tempDir.x,tempDir.y,0f) * tempOffset);
+
 
             //float tempRange = 12f;
             float tempRange = pulseRange - tempOffset;
@@ -57,7 +69,7 @@ public class TestAngularRaycastScript : MonoBehaviour {
 
             //Debug.DrawRay(startPos, startDir * tempDistance, Color.magenta, 0.1f);
 
-            float hitDistance = 0f;
+            //float hitDistance = 0f;
 
             if (rayHit.collider != null)
             {
