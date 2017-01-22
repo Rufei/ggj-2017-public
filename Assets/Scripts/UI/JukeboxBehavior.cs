@@ -24,10 +24,21 @@ public class JukeboxBehavior : MonoBehaviour
     [System.Serializable]
     public class Music
     {
+        [System.Serializable]
+        public class WeaponBeats
+        {
+            public bool[] guitarBeats;
+            public bool[] bassBeats;
+            public bool[] drumBeats;
+            public bool[] vocalBeats;
+            public bool[] cymbalBeats;
+        }
+
         public AudioClip clip;
         public bool requiresBeatMapping;
         public int beatsPerMinute;
         public int beatsPerMeasure = 4;
+        public WeaponBeats weaponBeats;
     }
 
     [System.Serializable]
@@ -36,6 +47,19 @@ public class JukeboxBehavior : MonoBehaviour
         public int beatInSong;
         public bool isPlayer1Firing;
         public bool isPlayer2Firing;
+        public Beat(int beatInSong)
+        {
+            this.beatInSong = beatInSong;
+            isPlayer1Firing = false;
+            isPlayer2Firing = false;
+        }
+    }
+
+    public static class CONST
+    {
+        public const float EARLY_INPUT_WINDOW_SECONDS = 0.05f;
+        public const float LATE_INPUT_WINDOW_SECONDS = 0.05f;
+        public const int WEAPON_BEAT_MAPPING_TOTAL_BEATS = 8;
     }
 
     public Library lib;
@@ -95,7 +119,7 @@ public class JukeboxBehavior : MonoBehaviour
     }
 
     // Most external facing func. Pound this in Update() to receive it on the soonest possible frame.
-    public Beat ConsumeBeat()
+    public Beat GetBeat()
     {
         if (currentMusic == null || !currentMusic.requiresBeatMapping || !musicSrc.isPlaying)
         {
@@ -108,9 +132,7 @@ public class JukeboxBehavior : MonoBehaviour
             return null;
         }
 
-        Beat beat = currentBeats[thisBeat];
-        currentBeats.Remove(thisBeat);
-        return beat;
+        return currentBeats[thisBeat];
     }
 
     private int GetCurrentBeat()
@@ -121,5 +143,95 @@ public class JukeboxBehavior : MonoBehaviour
         float raw = seconds * beatsPerQuarterNote * beatsPerSecond;
         int cur = (int)raw;
         return cur;
+    }
+
+    private int[] GetCurrentBeats(float earlyWindow, float lateWindow)
+    {
+        float seconds = musicSrc.time;
+        float beatsPerQuarterNote = (float)currentMusic.beatsPerMeasure / 4f;
+        float beatsPerSecond = ((float)currentMusic.beatsPerMinute) / 60f;
+        float earlyRaw = (Mathf.Max(seconds - earlyWindow, 0)) * beatsPerQuarterNote * beatsPerSecond;
+        float raw = seconds * beatsPerQuarterNote * beatsPerSecond;
+        float lateRaw = (Mathf.Min(seconds + lateWindow, currentMusic.clip.length)) * beatsPerQuarterNote * beatsPerSecond;
+        return new int[] { (int)earlyRaw, (int)raw, (int)lateRaw };
+    }
+
+    // Returns true if the attack was registered, otherwise it returns false
+    public bool RequestAttack(PlayerData attackingPlayer)
+    {
+        if (currentMusic == null || !currentMusic.requiresBeatMapping || !musicSrc.isPlaying)
+        {
+            return false;
+        }
+
+        int[] beats = GetCurrentBeats(CONST.EARLY_INPUT_WINDOW_SECONDS, CONST.LATE_INPUT_WINDOW_SECONDS);
+        int earliestAttackBeat = int.MaxValue;
+
+        foreach (int b in beats)
+        {
+            earliestAttackBeat = Mathf.Min(earliestAttackBeat,
+                GetSoonestPossibleWeaponBeat(b, attackingPlayer.characterType));
+        }
+
+        if (!currentBeats.ContainsKey(earliestAttackBeat))
+        {
+            Beat newBeat = new Beat(earliestAttackBeat);
+            currentBeats[earliestAttackBeat] = newBeat;
+        }
+
+        Beat beat = currentBeats[earliestAttackBeat];
+        if (beat == null)
+        {
+            return false;
+        }
+
+        // Everything checks out, register the attack
+        if (attackingPlayer.playerNum == 0)
+        {
+            beat.isPlayer1Firing = true;
+        }
+        if (attackingPlayer.playerNum == 1)
+        {
+            beat.isPlayer2Firing = true;
+        }
+        currentBeats[earliestAttackBeat] = beat;
+
+        return true;
+    }
+
+    private int GetSoonestPossibleWeaponBeat(int beat, Character.CHARTYPE weapon)
+    {
+        int measureBeat = beat % CONST.WEAPON_BEAT_MAPPING_TOTAL_BEATS;
+        bool[] weaponBeats = null;
+        switch(weapon)
+        {
+            case Character.CHARTYPE.CHAR_GUITAR:
+                weaponBeats = currentMusic.weaponBeats.guitarBeats;
+                break;
+            case Character.CHARTYPE.CHAR_BASS:
+                weaponBeats = currentMusic.weaponBeats.bassBeats;
+                break;
+            case Character.CHARTYPE.CHAR_DRUM:
+                weaponBeats = currentMusic.weaponBeats.drumBeats;
+                break;
+            case Character.CHARTYPE.CHAR_VOCAL:
+                weaponBeats = currentMusic.weaponBeats.vocalBeats;
+                break;
+            case Character.CHARTYPE.CHAR_CYMBAL:
+                weaponBeats = currentMusic.weaponBeats.cymbalBeats;
+                break;
+            default:
+                return int.MaxValue;
+        }
+        
+        for (int i = beat; i < beat + CONST.WEAPON_BEAT_MAPPING_TOTAL_BEATS; i++)
+        {
+            if (weaponBeats[i % CONST.WEAPON_BEAT_MAPPING_TOTAL_BEATS])
+            {
+                return i;
+            }
+        }
+
+        return int.MaxValue;
     }
 }
