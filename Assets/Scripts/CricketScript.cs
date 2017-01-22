@@ -21,8 +21,9 @@ public class CricketScript : MonoBehaviour {
 
     public SpriteRenderer effectPickupHalo;
 
-	// Use this for initialization
-	void Start () {
+
+    // Use this for initialization
+    void Start () {
         rigid = this.GetComponent<Rigidbody2D>();
         circleCol = this.GetComponent<CircleCollider2D>();
 

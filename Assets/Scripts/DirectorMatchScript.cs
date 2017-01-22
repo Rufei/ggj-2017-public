@@ -28,6 +28,12 @@ public class DirectorMatchScript : MonoBehaviour {
 
     private AudioSource tempAudioSource;
 
+    private bool isPlayer1Respawning;
+    private bool isPlayer2Respawning;
+
+    public GameObject effectPlayer1HitPrefab;
+    public GameObject effectPlayer2HitPrefab;
+
     // Match begin timing
     // 3 seconds total to match tempo taps from the drummer in the main music
     // READY...  prompt
@@ -35,7 +41,7 @@ public class DirectorMatchScript : MonoBehaviour {
 
 
     // Use this for initialization
-	void Start () {
+    void Start () {
         tempAudioSource = this.GetComponent<AudioSource>();
 
         prepMatch();
@@ -87,13 +93,25 @@ public class DirectorMatchScript : MonoBehaviour {
 
 	}
 
-    public void player1Hit()
+    public void reportPlayer1Hit()
     {
-        player1Anchor.transform.position = spawnPlayer1Transform.transform.position;
+        if (!isPlayer1Respawning)
+        {
+            isPlayer1Respawning = true;
+            Instantiate(effectPlayer1HitPrefab, player1Anchor.transform.position, Quaternion.identity);
+            player1Anchor.transform.position = spawnPlayer1Transform.transform.position;
+            isPlayer1Respawning = false;
+        }
     }
 
-    public void player2hit()
+    public void reportPlayer2Hit()
     {
-
+        if (!isPlayer2Respawning)
+        {
+            isPlayer1Respawning = true;
+            Instantiate(effectPlayer2HitPrefab, player2Anchor.transform.position, Quaternion.identity);
+            player2Anchor.transform.position = spawnPlayer2Transform.transform.position;
+            isPlayer1Respawning = false;
+        }
     }
 }

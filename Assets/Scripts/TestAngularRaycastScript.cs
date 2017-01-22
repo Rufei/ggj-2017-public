@@ -16,7 +16,9 @@ public class TestAngularRaycastScript : MonoBehaviour {
     private float turnSpeed = 40f;
 
     public float pulseRange = 3.5f;
-    
+
+    private DirectorMatchScript matchDirector;
+
     /*
     RANGES:
     AOE = 2
@@ -31,6 +33,8 @@ public class TestAngularRaycastScript : MonoBehaviour {
     */
 	// Use this for initialization
 	void Start () {
+        matchDirector = GameObject.FindObjectOfType<DirectorMatchScript>();
+
         angleStep = angularRangeDegrees / bucketsNum;
 	}
 	
@@ -103,6 +107,19 @@ public class TestAngularRaycastScript : MonoBehaviour {
                 tempPart.startDelay = tempDelay;
                 //tempPart.main.startDelay = tempDelay;
                 tempEffect.SetActive(true);
+
+                if(rayHit.collider.tag == "Player1Tag")
+                {
+                    Debug.Log("Player 1 is hit");
+                    matchDirector.reportPlayer1Hit();
+                }
+
+                if (rayHit.collider.tag == "Player2Tag")
+                {
+                    Debug.Log("Player 2 is hit");
+                    matchDirector.reportPlayer2Hit();
+                }
+
 
             }
         }
