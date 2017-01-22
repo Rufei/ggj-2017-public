@@ -17,7 +17,7 @@ public class PlayerWeaponScript : MonoBehaviour {
     // Use this for initialization
     void Start () {
         playerScript = this.GetComponent<SimplePlayerScript>();
-        equippedWeapon = InstrumentEnum.None;
+        //equippedWeapon = InstrumentEnum.None;
 		
 	}
 	
@@ -41,7 +41,7 @@ public class PlayerWeaponScript : MonoBehaviour {
 
     void attemptFireWeapon()
     {
-        Debug.Log("Player  " + (playerScript.playerNum + 1) + " " + "attempted to fire " + equippedWeapon);
+        //Debug.Log("Player  " + (playerScript.playerNum + 1) + " " + "attempted to fire " + equippedWeapon);
         switch (equippedWeapon)
         {
             case InstrumentEnum.Guitar:
