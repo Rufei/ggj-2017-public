@@ -95,6 +95,10 @@ public class DirectorMatchScript : MonoBehaviour {
             {
                 Debug.Log("The Match has ended!");
                 hasMatchEnded = true;
+
+                crickScript.transform.position = new Vector3(100f, 100f, 0f);
+                crickScript.isPickedUpByAPlayer = true;
+
                 finishPromptScript.triggerPrompt();
             }
         }
@@ -114,8 +118,13 @@ public class DirectorMatchScript : MonoBehaviour {
 
         if (hasMatchEnded)
         {
-            crickScript.transform.position = new Vector3(100f, 100f, 0f);
-            crickScript.isPickedUpByAPlayer = true;
+            /*
+            if (!crickScript.isPickedUpByAPlayer)
+            {
+                crickScript.transform.position = new Vector3(100f, 100f, 0f);
+                crickScript.isPickedUpByAPlayer = true;
+            }
+            */
         }
 
 	}
