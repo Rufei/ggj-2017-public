@@ -14,6 +14,6 @@ public class SimpleShakeScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        this.transform.position = startPos + new Vector3(Random.Range(-genRange, genRange), Random.Range(-genRange, genRange), 0f);
+        this.transform.localPosition = startPos + new Vector3(Random.Range(-genRange, genRange), Random.Range(-genRange, genRange), 0f);
 	}
 }

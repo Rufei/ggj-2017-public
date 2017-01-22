@@ -6,8 +6,8 @@ public class ChangesCharacterWithPlayerAxes : MonoBehaviour
 {
     public static class CONST
     {
-        public const float fudgeFactor = 0.03f;
-        public const float traverseCooldown = 0.3f;
+        public const float fudgeFactor = 0.9f;
+        public const float traverseCooldown = 0.5f;
     }
 
     public int playerNum;
@@ -33,6 +33,11 @@ public class ChangesCharacterWithPlayerAxes : MonoBehaviour
         if (CheckLeftTraverse())
         {
             charSelect.SetPlayerCharacter(playerNum, -1);
+        }
+
+        if (CheckConfirmCharacter())
+        {
+            gameData.GetPlayerData(playerNum).isReady = !gameData.GetPlayerData(playerNum).isReady;
         }
     }
 
@@ -66,5 +71,10 @@ public class ChangesCharacterWithPlayerAxes : MonoBehaviour
         }
         leftTraverseCooldown += CONST.traverseCooldown;
         return true;
+    }
+
+    bool CheckConfirmCharacter()
+    {
+        return Input.GetKeyDown(playerNum == 0 ? GameData.CONST.CONFIRM_BUTTON_PLAYER_1 : GameData.CONST.CONFIRM_BUTTON_PLAYER_2);
     }
 }

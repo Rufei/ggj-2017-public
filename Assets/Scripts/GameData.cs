@@ -6,11 +6,13 @@ public class PlayerData
 {
     public int playerNum;
     public Character.CHARTYPE characterType;
+    public bool isReady;
 
     public PlayerData(int playerNum)
     {
         this.playerNum = playerNum;
         characterType = 0;
+        isReady = false;
     }
 
     public static string GetAxis(int playerNum, string baseAxis)
@@ -28,6 +30,8 @@ public class GameData : MonoBehaviour
         public const string HORIZONTAL_AXIS_PLAYER_2 = "HorizontalAlt";
         public const string VERTICAL_AXIS_PLAYER_1 = "Vertical";
         public const string VERTICAL_AXIS_PLAYER_2 = "VerticalAlt";
+        public const string CONFIRM_BUTTON_PLAYER_1 = "space";
+        public const string CONFIRM_BUTTON_PLAYER_2 = "return";
     }
 
     public List<Character> charactersAvailable;
@@ -60,5 +64,14 @@ public class GameData : MonoBehaviour
     void AddPlayer(int playerNum)
     {
         playerDataList.Insert(playerNum, new PlayerData(playerNum));
+    }
+
+    public PlayerData GetPlayerData(int playerNum)
+    {
+        if (playerDataList.Count <= playerNum)
+        {
+            throw new System.ArgumentOutOfRangeException("No player exists with playerNum=" + playerNum);
+        }
+        return playerDataList[playerNum];
     }
 }

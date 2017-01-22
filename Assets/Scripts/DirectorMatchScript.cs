@@ -27,6 +27,7 @@ public class DirectorMatchScript : MonoBehaviour {
     public EffectPromptFadeScript finishPromptScript;
 
     private AudioSource tempAudioSource;
+    private JukeboxBehavior jukebox;
 
     // Match begin timing
     // 3 seconds total to match tempo taps from the drummer in the main music
@@ -35,8 +36,9 @@ public class DirectorMatchScript : MonoBehaviour {
 
 
     // Use this for initialization
-	void Start () {
+    void Start () {
         tempAudioSource = this.GetComponent<AudioSource>();
+        jukebox = GameObject.Find("/Jukebox").GetComponent<JukeboxBehavior>();
 
         prepMatch();
 	}
@@ -56,7 +58,8 @@ public class DirectorMatchScript : MonoBehaviour {
 
         player2Anchor.transform.position = spawnPlayer2Transform.position;
         player2Anchor.transform.rotation = spawnPlayer2Transform.rotation;
-        tempAudioSource.Play();
+        jukebox.PlayMusic(jukebox.lib.gameMusic);
+        //tempAudioSource.Play();
         readyPromptScript.triggerPrompt();
 
     }
