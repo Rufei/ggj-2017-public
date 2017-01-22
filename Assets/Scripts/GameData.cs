@@ -46,7 +46,7 @@ public class GameData : MonoBehaviour
     }
 
     // Call this to start
-    void MakeFresh()
+    public void MakeFresh()
     {
         playerDataList = new List<PlayerData>();
         isGameStarted = false;
