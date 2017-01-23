@@ -128,6 +128,7 @@ public class DirectorMatchScript : MonoBehaviour {
 
         if (hasMatchEnded)
         {
+
             /*
             if (!crickScript.isPickedUpByAPlayer)
             {
