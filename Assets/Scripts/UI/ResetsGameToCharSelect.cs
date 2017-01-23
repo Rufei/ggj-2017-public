@@ -16,7 +16,7 @@ public class ResetsGameToCharSelect : MonoBehaviour
         jukebox = GameObject.Find("/Jukebox").GetComponent<JukeboxBehavior>();
     }
 
-    void OnMouseDown()
+    void OnClick()
     {
         ResetGame();
     }
