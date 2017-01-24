@@ -21,11 +21,14 @@ public class CricketScript : MonoBehaviour {
 
     public SpriteRenderer effectPickupHalo;
 
+    private DirectorMatchScript matchDirector;
 
     // Use this for initialization
     void Start () {
         rigid = this.GetComponent<Rigidbody2D>();
         circleCol = this.GetComponent<CircleCollider2D>();
+
+        matchDirector = GameObject.FindObjectOfType<DirectorMatchScript>();
 
         isPickedUpByAPlayer = false;
 
@@ -37,7 +40,7 @@ public class CricketScript : MonoBehaviour {
         if (!isPickedUpByAPlayer)
         {
             jumpTimer += Time.deltaTime;
-            if (jumpTimer > jumpThreshold)
+            if ((jumpTimer > jumpThreshold) && !matchDirector.hasMatchEnded)
             {
                 jumpTimer = 0f;
                 cricketJump();

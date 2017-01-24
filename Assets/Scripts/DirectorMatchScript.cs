@@ -105,8 +105,9 @@ public class DirectorMatchScript : MonoBehaviour {
                 Debug.Log("The Match has ended!");
                 hasMatchEnded = true;
 
+                crickScript.isPickedUpByAPlayer = false;
                 crickScript.transform.position = new Vector3(100f, 100f, 0f);
-                crickScript.isPickedUpByAPlayer = true;
+
 
                 finishAudio.Play();
                 finishPromptScript.triggerPrompt();
