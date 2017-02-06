@@ -108,13 +108,16 @@ public class TestAngularRaycastScript : MonoBehaviour {
                 //tempPart.main.startDelay = tempDelay;
                 tempEffect.SetActive(true);
 
-                if(rayHit.collider.tag == "Player1Tag")
+                if(rayHit.collider.tag != "Player1Tag" && rayHit.collider.tag != "Player2Tag" && rayHit.collider.tag != "CricketTag")
+                {
+                    //rayHit.collider.gameObject.SendMessageUpwards("messageGlowAmount", 0.2f);
+                    rayHit.collider.gameObject.SendMessageUpwards("messageGlowDelay", tempDelay + 0.2f);
+                }
+                else if(rayHit.collider.tag == "Player1Tag")
                 {
                     //Debug.Log("Player 1 is hit");
                     matchDirector.reportPlayer1Hit();
-                }
-
-                if (rayHit.collider.tag == "Player2Tag")
+                }else if (rayHit.collider.tag == "Player2Tag")
                 {
                     //Debug.Log("Player 2 is hit");
                     matchDirector.reportPlayer2Hit();
