@@ -33,8 +33,17 @@ public class DirectorMatchScript : MonoBehaviour {
     private bool isPlayer1Respawning;
     private bool isPlayer2Respawning;
 
+    public float player1RespawnTimer;
+    private float player1RespawnThreshold = 2f;
+
+    public float player2RespawnTimer;
+    private float player2RespawnThreshold = 2f;
+
     public GameObject effectPlayer1HitPrefab;
     public GameObject effectPlayer2HitPrefab;
+
+    public GameObject effectPlayer1SpawnPrefab;
+    public GameObject effectPlayer2SpawnPrefab;
 
     private CricketScript crickScript;
 
@@ -85,6 +94,33 @@ public class DirectorMatchScript : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
+
+        if (isPlayer1Respawning)
+        {
+            player1RespawnTimer -= Time.deltaTime;
+            if(player1RespawnTimer <= 0)
+            {
+                isPlayer1Respawning = false;
+                player1RespawnTimer = 0f;
+                Instantiate(effectPlayer1SpawnPrefab, spawnPlayer1Transform);
+                player1Anchor.transform.position = spawnPlayer1Transform.position;
+                player1Anchor.transform.rotation = spawnPlayer1Transform.rotation;
+            }
+        }
+
+        if (isPlayer2Respawning)
+        {
+            player2RespawnTimer -= Time.deltaTime;
+            if (player2RespawnTimer <= 0)
+            {
+                isPlayer2Respawning = false;
+                player2RespawnTimer = 0f;
+                Instantiate(effectPlayer2SpawnPrefab, spawnPlayer2Transform);
+                player2Anchor.transform.position = spawnPlayer2Transform.position;
+                player2Anchor.transform.rotation = spawnPlayer2Transform.rotation;
+            }
+        }
+
         if (!hasMatchBegun)
         {
             matchIntroTimer += Time.deltaTime;
@@ -147,11 +183,17 @@ public class DirectorMatchScript : MonoBehaviour {
         {
             isPlayer1Respawning = true;
             Instantiate(effectPlayer1HitPrefab, player1Anchor.transform.position, Quaternion.identity);
-            player1Anchor.transform.position = spawnPlayer1Transform.transform.position;
-            player1Anchor.transform.rotation = spawnPlayer1Transform.transform.rotation;
+
+            player1Anchor.transform.position = new Vector3(100f, 100f, 0f);
+            player1RespawnTimer = player1RespawnThreshold;
+
+            //player1Anchor.transform.position = spawnPlayer1Transform.transform.position;
+            //player1Anchor.transform.rotation = spawnPlayer1Transform.transform.rotation;
+            
+            
             //respawnCricket();
             crickScript.resetCricket();
-            isPlayer1Respawning = false;
+            //isPlayer1Respawning = false;
         }
     }
 
@@ -159,13 +201,18 @@ public class DirectorMatchScript : MonoBehaviour {
     {
         if (!isPlayer2Respawning)
         {
-            isPlayer1Respawning = true;
+            isPlayer2Respawning = true;
             Instantiate(effectPlayer2HitPrefab, player2Anchor.transform.position, Quaternion.identity);
-            player2Anchor.transform.position = spawnPlayer2Transform.transform.position;
-            player2Anchor.transform.rotation = spawnPlayer2Transform.transform.rotation;
+
+            player2Anchor.transform.position = new Vector3(-100f, -100f, 0f);
+            player2RespawnTimer = player2RespawnThreshold;
+
+            //player2Anchor.transform.position = spawnPlayer2Transform.transform.position;
+            //player2Anchor.transform.rotation = spawnPlayer2Transform.transform.rotation;
+
             //respawnCricket();
             crickScript.resetCricket();
-            isPlayer1Respawning = false;
+            //isPlayer2Respawning = false;
         }
     }
 
