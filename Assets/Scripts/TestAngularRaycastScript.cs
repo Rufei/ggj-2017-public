@@ -110,8 +110,9 @@ public class TestAngularRaycastScript : MonoBehaviour {
 
                 if(rayHit.collider.tag != "Player1Tag" && rayHit.collider.tag != "Player2Tag" && rayHit.collider.tag != "CricketTag")
                 {
+                    float tempDelayOffset = 0.2f;
                     //rayHit.collider.gameObject.SendMessageUpwards("messageGlowAmount", 0.2f);
-                    rayHit.collider.gameObject.SendMessageUpwards("messageGlowDelay", tempDelay + 0.2f);
+                    rayHit.collider.gameObject.SendMessageUpwards("messageGlowDelay", tempDelay + tempDelayOffset);
                 }
                 else if(rayHit.collider.tag == "Player1Tag")
                 {
