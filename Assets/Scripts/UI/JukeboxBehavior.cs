@@ -62,8 +62,10 @@ public class JukeboxBehavior : MonoBehaviour
 
     public static class CONST
     {
-        public const float EARLY_INPUT_WINDOW_SECONDS = 0.05f;
-        public const float LATE_INPUT_WINDOW_SECONDS = 0.05f;
+//        public const float EARLY_INPUT_WINDOW_SECONDS = 0.05f;
+//        public const float LATE_INPUT_WINDOW_SECONDS = 0.05f;
+        public const float EARLY_INPUT_WINDOW_SECONDS = 0.09375f;
+        public const float LATE_INPUT_WINDOW_SECONDS = 0.09375f;
         public const float MUSIC_VOLUME_DEFAULT = 0.4f;
         public const float MUSIC_VOLUME_MUTED = 0.0f;
         public const float MUSIC_VOLUME_LOUD = 0.8f;
@@ -313,8 +315,21 @@ public class JukeboxBehavior : MonoBehaviour
 
         foreach (int b in beats)
         {
-            earliestAttackBeat = Mathf.Min(earliestAttackBeat,
-                GetSoonestPossibleWeaponBeat(b, attackingPlayer.characterType));
+            earliestAttackBeat = Mathf.Min(earliestAttackBeat,GetSoonestPossibleWeaponBeat(b, attackingPlayer.characterType));
+        }
+
+        bool isValid = false;
+        foreach (int b in beats)
+        {
+            if (b == earliestAttackBeat)
+            {
+                isValid = true;
+            }
+        }
+
+        if (!isValid)
+        {
+            return false;
         }
 
         if (!currentBeats.ContainsKey(earliestAttackBeat))
