@@ -12,12 +12,15 @@ public class ReflectsPlayerKeySelect : MonoBehaviour
     private MeshRenderer readyRedText;
     private Character.CHARTYPE curCharType = 0;
 
+    //private Vector3 startScale;
+
     // Use this for initialization
     void Start()
     {
         gameData = GameObject.Find("/GameData").GetComponent<GameData>();
         jukebox = GameObject.Find("/Jukebox").GetComponent<JukeboxBehavior>();
         portrait = transform.FindChild("Portrait").GetComponent<SpriteRenderer>();
+        //startScale = portrait.transform.localScale;
         readyWhiteText = transform.FindChild("ReadyWhite").GetComponent<MeshRenderer>();
         readyRedText = readyWhiteText.transform.FindChild("ReadyRed").GetComponent<MeshRenderer>();
     }
@@ -45,6 +48,15 @@ public class ReflectsPlayerKeySelect : MonoBehaviour
     {
         portrait.sprite = GetCharacterSprite(characterType);
         curCharType = characterType;
+        /*
+        if (curCharType == Character.CHARTYPE.CHAR_VOCAL || curCharType == Character.CHARTYPE.CHAR_DRUM)
+        {
+            portrait.transform.localScale = new Vector3(-startScale.x, startScale.y, startScale.z);
+        }else
+        {
+            portrait.transform.localScale = startScale;
+        }
+        */
     }
 
     void CheckReady(bool isReady)
