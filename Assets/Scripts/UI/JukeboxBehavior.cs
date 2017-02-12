@@ -67,7 +67,7 @@ public class JukeboxBehavior : MonoBehaviour
         public const float EARLY_INPUT_WINDOW_SECONDS = 0.09375f;
         public const float LATE_INPUT_WINDOW_SECONDS = 0.09375f;
         public const float MUSIC_VOLUME_DEFAULT = 0.4f;
-        public const float MUSIC_VOLUME_MUTED = 0.0f;
+        public const float MUSIC_VOLUME_MUTED = 0.1f;
         public const float MUSIC_VOLUME_LOUD = 0.6f;
     }
 
@@ -142,12 +142,12 @@ public class JukeboxBehavior : MonoBehaviour
             if (beat.isPlayer1Firing)
             {
                 GetAudioSource(playerOneType).volume = CONST.MUSIC_VOLUME_LOUD;
-                playerOneMuteBeat = GetSoonestPossibleWeaponBeat(beat.beatInSong + 1, playerOneType);
+                playerOneMuteBeat = GetSoonestPossibleWeaponBeat(beat.beatInSong + 1, playerOneType) + 1;
             }
             if (beat.isPlayer2Firing)
             {
                 GetAudioSource(playerTwoType).volume = CONST.MUSIC_VOLUME_LOUD;
-                playerTwoMuteBeat = GetSoonestPossibleWeaponBeat(beat.beatInSong + 1, playerTwoType);
+                playerTwoMuteBeat = GetSoonestPossibleWeaponBeat(beat.beatInSong + 1, playerTwoType) + 1;
             }
             lastHandledBeat = GetCurrentBeat();
         }
