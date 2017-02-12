@@ -29,7 +29,8 @@ public class EffectPortraitScript : MonoBehaviour {
         movementTimer += Time.deltaTime;
         if (playerMoveScript.isPlayerMoving)
         {
-            this.transform.localPosition = startPos + new Vector3(0, animCurveMovement.Evaluate((movementTimer % movementThreshold) / movementThreshold), 0);
+            //this.transform.localPosition = startPos + new Vector3(0, animCurveMovement.Evaluate((movementTimer % movementThreshold) / movementThreshold), 0);
+            this.transform.localPosition = startPos + new Vector3(0, animCurveMovement.Evaluate((Mathf.Repeat(movementTimer,  movementThreshold)) / movementThreshold), 0);
         }
         else
         {

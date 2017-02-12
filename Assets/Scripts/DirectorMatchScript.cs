@@ -26,7 +26,7 @@ public class DirectorMatchScript : MonoBehaviour {
     public EffectPromptFadeScript battlePromptScript;
     public EffectPromptFadeScript finishPromptScript;
 
-    private AudioSource tempAudioSource;
+    private AudioSource scoreAudioSource;
     private GameData gameData;
     private JukeboxBehavior jukebox;
 
@@ -60,9 +60,12 @@ public class DirectorMatchScript : MonoBehaviour {
 
     public AudioSource finishAudio;
 
+    public AudioClip player1ScoreClip;
+    public AudioClip player2ScoreClip;
+
     // Use this for initialization
     void Start () {
-        tempAudioSource = this.GetComponent<AudioSource>();
+        scoreAudioSource = this.GetComponent<AudioSource>();
         gameData = GameObject.Find("/GameData").GetComponent<GameData>();
         jukebox = GameObject.Find("/Jukebox").GetComponent<JukeboxBehavior>();
         crickScript = GameObject.FindObjectOfType<CricketScript>();
@@ -220,6 +223,14 @@ public class DirectorMatchScript : MonoBehaviour {
     {
         Debug.Log("Player 1 SCORED");
         Instantiate(effectCricketScorePrefab, spawnPlayer2Transform.transform.position, Quaternion.identity);
+
+        player1Anchor.transform.position = spawnPlayer1Transform.position;
+        player1Anchor.transform.rotation = spawnPlayer1Transform.rotation;
+
+        Instantiate(effectPlayer1SpawnPrefab, spawnPlayer1Transform.position, Quaternion.identity);
+        scoreAudioSource.clip = player1ScoreClip;
+        scoreAudioSource.Play();
+
         scorePlayer1++;
         respawnCricket();
     }
@@ -228,6 +239,15 @@ public class DirectorMatchScript : MonoBehaviour {
     {
         Debug.Log("Player 2 SCORED");
         Instantiate(effectCricketScorePrefab, spawnPlayer1Transform.transform.position, Quaternion.identity);
+
+        player2Anchor.transform.position = spawnPlayer2Transform.position;
+        player2Anchor.transform.rotation = spawnPlayer2Transform.rotation;
+
+        Instantiate(effectPlayer2SpawnPrefab, spawnPlayer2Transform.position, Quaternion.identity);
+
+        scoreAudioSource.clip = player2ScoreClip;
+        scoreAudioSource.Play();
+
         scorePlayer2++;
         respawnCricket();
     }
