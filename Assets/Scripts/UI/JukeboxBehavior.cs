@@ -142,12 +142,23 @@ public class JukeboxBehavior : MonoBehaviour
             if (beat.isPlayer1Firing)
             {
                 GetAudioSource(playerOneType).volume = CONST.MUSIC_VOLUME_LOUD;
-                playerOneMuteBeat = GetSoonestPossibleWeaponBeat(beat.beatInSong + 1, playerOneType) + 1;
+                if (playerOneType.Equals(Character.CHARTYPE.CHAR_CYMBAL)) {
+                    playerOneMuteBeat = GetSoonestPossibleWeaponBeat(beat.beatInSong + 1, playerOneType);
+                } else
+                {
+                    playerOneMuteBeat = GetSoonestPossibleWeaponBeat(beat.beatInSong + 1, playerOneType) + 1;
+                }
             }
             if (beat.isPlayer2Firing)
             {
                 GetAudioSource(playerTwoType).volume = CONST.MUSIC_VOLUME_LOUD;
-                playerTwoMuteBeat = GetSoonestPossibleWeaponBeat(beat.beatInSong + 1, playerTwoType) + 1;
+                if (playerTwoType.Equals(Character.CHARTYPE.CHAR_CYMBAL))
+                {
+                    playerTwoMuteBeat = GetSoonestPossibleWeaponBeat(beat.beatInSong + 1, playerTwoType);
+                } else
+                {
+                    playerTwoMuteBeat = GetSoonestPossibleWeaponBeat(beat.beatInSong + 1, playerTwoType) + 1;
+                }
             }
             lastHandledBeat = GetCurrentBeat();
         }
