@@ -19,7 +19,9 @@ public class EffectPortraitScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+
         startPos = this.transform.localPosition;
+
 	}
 	
 	// Update is called once per frame
