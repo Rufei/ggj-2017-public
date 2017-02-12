@@ -66,9 +66,9 @@ public class JukeboxBehavior : MonoBehaviour
 //        public const float LATE_INPUT_WINDOW_SECONDS = 0.05f;
         public const float EARLY_INPUT_WINDOW_SECONDS = 0.09375f;
         public const float LATE_INPUT_WINDOW_SECONDS = 0.09375f;
-        public const float MUSIC_VOLUME_DEFAULT = 0.5f;
+        public const float MUSIC_VOLUME_DEFAULT = 0.4f;
         public const float MUSIC_VOLUME_MUTED = 0.0f;
-        public const float MUSIC_VOLUME_LOUD = 0.7f;
+        public const float MUSIC_VOLUME_LOUD = 0.6f;
     }
 
     public Library lib;
