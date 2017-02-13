@@ -16,6 +16,9 @@ public class PlayerWeaponScript : MonoBehaviour {
     public TestAngularRaycastScript guitarScript;
     public TestAngularRaycastScript bassScript;
     public TestAngularRaycastScript drumScript;
+    public TestAngularRaycastScript vocalsScript;
+    public TestAngularRaycastScript cymbalScript;
+
 
     // Use this for initialization
     void Start () {
@@ -60,8 +63,10 @@ public class PlayerWeaponScript : MonoBehaviour {
                     drumScript.testRays();
                     break;
                 case Character.CHARTYPE.CHAR_VOCAL:
+                    vocalsScript.testRays();
                     break;
                 case Character.CHARTYPE.CHAR_CYMBAL:
+                    cymbalScript.testRays();
                     break;
                 default:
                     break;
