@@ -52,8 +52,14 @@ public class ShowOnFinishCanvasFinishing : MonoBehaviour
                 {
                     winText.text = "It's a tie!";
                 }
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
+                    ResetGame();
+                }
             }
         }
+
+
     }
 
     public void EndThis()
