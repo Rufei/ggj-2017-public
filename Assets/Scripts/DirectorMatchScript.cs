@@ -42,6 +42,9 @@ public class DirectorMatchScript : MonoBehaviour {
     public GameObject effectPlayer1HitPrefab;
     public GameObject effectPlayer2HitPrefab;
 
+    public GameObject effectPlayer1MarkPrefab;
+    public GameObject effectPlayer2MarkPrefab;
+
     public GameObject effectPlayer1SpawnPrefab;
     public GameObject effectPlayer2SpawnPrefab;
 
@@ -62,6 +65,9 @@ public class DirectorMatchScript : MonoBehaviour {
 
     public AudioClip player1ScoreClip;
     public AudioClip player2ScoreClip;
+
+    public AudioSource player1Source;
+    public AudioSource player2Source;
 
     // Use this for initialization
     void Start () {
@@ -186,13 +192,15 @@ public class DirectorMatchScript : MonoBehaviour {
         {
             isPlayer1Respawning = true;
             Instantiate(effectPlayer1HitPrefab, player1Anchor.transform.position, Quaternion.identity);
+            Instantiate(effectPlayer1MarkPrefab, player1Anchor.transform.position, Quaternion.identity);
 
             player1Anchor.transform.position = new Vector3(100f, 100f, 0f);
             player1RespawnTimer = player1RespawnThreshold;
 
             //player1Anchor.transform.position = spawnPlayer1Transform.transform.position;
             //player1Anchor.transform.rotation = spawnPlayer1Transform.transform.rotation;
-            
+
+            player1Source.Play();
             
             //respawnCricket();
             crickScript.resetCricket();
@@ -206,9 +214,12 @@ public class DirectorMatchScript : MonoBehaviour {
         {
             isPlayer2Respawning = true;
             Instantiate(effectPlayer2HitPrefab, player2Anchor.transform.position, Quaternion.identity);
+            Instantiate(effectPlayer2MarkPrefab, player1Anchor.transform.position, Quaternion.identity);
 
             player2Anchor.transform.position = new Vector3(-100f, -100f, 0f);
             player2RespawnTimer = player2RespawnThreshold;
+
+            player2Source.Play();
 
             //player2Anchor.transform.position = spawnPlayer2Transform.transform.position;
             //player2Anchor.transform.rotation = spawnPlayer2Transform.transform.rotation;
