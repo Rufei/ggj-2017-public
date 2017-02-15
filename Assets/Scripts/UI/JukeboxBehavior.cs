@@ -66,7 +66,7 @@ public class JukeboxBehavior : MonoBehaviour
 //        public const float LATE_INPUT_WINDOW_SECONDS = 0.05f;
         public const float EARLY_INPUT_WINDOW_SECONDS = 0.09375f;
         public const float LATE_INPUT_WINDOW_SECONDS = 0.09375f;
-        public const float MUSIC_VOLUME_DEFAULT = 0.3f;
+        public const float MUSIC_VOLUME_DEFAULT = 0.03f;
         public const float MUSIC_VOLUME_MUTED = 0.0f;
         public const float MUSIC_VOLUME_LOUD = 0.4f;
     }
@@ -86,7 +86,8 @@ public class JukeboxBehavior : MonoBehaviour
 
     private Character.CHARTYPE playerOneType;
     private Character.CHARTYPE playerTwoType;
-    private int lastHandledBeat = -1;
+    private int lastHandledPlayer1Beat = -1;
+    private int lastHandledPlayer2Beat = -1;
     private int playerOneMuteBeat = -1;
     private int playerTwoMuteBeat = -1;
 
@@ -137,7 +138,7 @@ public class JukeboxBehavior : MonoBehaviour
     void Update()
     {
         JukeboxBehavior.Beat beat = GetBeat();
-        if (beat != null && lastHandledBeat != beat.beatInSong) {
+        if (beat != null && lastHandledPlayer1Beat != beat.beatInSong) {
             //Debug.Log("Player  " + (playerScript.playerNum + 1) + " " + "FIRING at " + Time.deltaTime);
             if (beat.isPlayer1Firing)
             {
@@ -148,7 +149,13 @@ public class JukeboxBehavior : MonoBehaviour
                 {
                     playerOneMuteBeat = GetSoonestPossibleWeaponBeat(beat.beatInSong + 1, playerOneType) + 1;
                 }
+                lastHandledPlayer1Beat = GetCurrentBeat();
             }
+ 
+        }
+
+        if (beat != null && lastHandledPlayer2Beat != beat.beatInSong)
+        {
             if (beat.isPlayer2Firing)
             {
                 GetAudioSource(playerTwoType).volume = CONST.MUSIC_VOLUME_LOUD;
@@ -159,18 +166,19 @@ public class JukeboxBehavior : MonoBehaviour
                 {
                     playerTwoMuteBeat = GetSoonestPossibleWeaponBeat(beat.beatInSong + 1, playerTwoType) + 1;
                 }
+                lastHandledPlayer2Beat = GetCurrentBeat();
             }
-            lastHandledBeat = GetCurrentBeat();
+
         }
 
         if (currentMusic != null)
         {
             int cur = GetCurrentBeat();
-            if (playerOneMuteBeat == cur)
+            if (playerOneMuteBeat < cur)
             {
                 GetAudioSource(playerOneType).volume = CONST.MUSIC_VOLUME_MUTED;
             }
-            if (playerTwoMuteBeat == cur)
+            if (playerTwoMuteBeat < cur)
             {
                 GetAudioSource(playerTwoType).volume = CONST.MUSIC_VOLUME_MUTED;
             }
@@ -369,7 +377,10 @@ public class JukeboxBehavior : MonoBehaviour
         {
             beat.isPlayer2Firing = true;
         }
-        currentBeats[earliestAttackBeat] = beat;
+
+        
+        //Debug.Log("beat number:" + beat.beatInSong + " isP1: " + beat.isPlayer1Firing + " isP2: " + beat.isPlayer2Firing);
+        //currentBeats[earliestAttackBeat] = beat;
 
         return true;
     }
