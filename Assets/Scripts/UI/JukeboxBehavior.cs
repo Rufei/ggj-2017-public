@@ -186,7 +186,10 @@ public class JukeboxBehavior : MonoBehaviour
     //    }
     //}
 
-    
+    public void resetBeatDictionary()
+    {
+        currentBeats.Clear();
+    }
 
     public void PlaySfx(Sfx sfx)
     {

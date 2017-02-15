@@ -51,6 +51,8 @@ public class GameData : MonoBehaviour
         playerDataList = new List<PlayerData>();
         isGameStarted = false;
         InitPlayers(numPlayers);
+        JukeboxBehavior jukeboxScript = GameObject.FindObjectOfType<JukeboxBehavior>();
+        jukeboxScript.resetBeatDictionary();
     }
 
     void InitPlayers(int numPlayers)
